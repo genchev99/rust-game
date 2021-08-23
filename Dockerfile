@@ -34,6 +34,6 @@ RUN apt-get update -qy \
 
 # Install the rest of the application
 ADD . /app/
-RUN cargo build
+#RUN cargo build
 
 CMD ["./bin/entrypoint.sh"]

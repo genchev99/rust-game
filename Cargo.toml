@@ -12,3 +12,4 @@ path = "src/main.rs"
 
 [dependencies]
 ggez = "0.6"
+rand = "0.8.4"
