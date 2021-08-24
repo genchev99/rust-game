@@ -12,6 +12,7 @@ use crate::config::{MILLIS_PER_UPDATE, SCREEN_SIZE, GRID_SIZE};
 use crate::movement::Direction;
 
 struct GameState {
+    asset: graphics::Image,
     player: Player,
     creature: Creature,
     gameover: bool,
@@ -19,10 +20,13 @@ struct GameState {
 }
 
 impl GameState {
-    pub fn new() -> GameResult<Self> {
+    pub fn new(ctx: &mut Context) -> GameResult<Self> {
+        let asset = graphics::Image::new(ctx, "/tiles/generic-rpg-Slice.png")?;
         let player_pos = (GRID_SIZE.0 / 4, GRID_SIZE.1 / 2).into();
         let creature_pos = (GRID_SIZE.0 / 4, GRID_SIZE.1 / 2).into();
+
         Ok(GameState {
+            asset,
             player: Player::new(player_pos),
             creature: Creature::new(creature_pos),
             gameover: false,
@@ -46,7 +50,8 @@ impl event::EventHandler<ggez::GameError> for GameState {
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
         graphics::clear(ctx, [0.0, 1.0, 0.0, 1.0].into());
         self.player.draw(ctx)?;
-        self.creature.draw(ctx)?;
+        // self.creature.draw(ctx, self.asset)?;
+        graphics::draw(ctx, &self.asset, graphics::DrawParam::default())?;
         graphics::present(ctx)?;
         ggez::timer::yield_now();
         Ok(())
@@ -66,7 +71,7 @@ impl event::EventHandler<ggez::GameError> for GameState {
 }
 
 fn main() -> GameResult {
-    let (ctx, event_loop) = ggez::ContextBuilder::new("game", "Hristiyan Genchev")
+    let (mut ctx, event_loop) = ggez::ContextBuilder::new("game", "Hristiyan Genchev")
         .window_setup(ggez::conf::WindowSetup::default().title("Game!"))
         .window_mode(
             ggez::conf::WindowMode::default()
@@ -75,6 +80,6 @@ fn main() -> GameResult {
         .build()
         .expect("Failed to build ggez context");
 
-    let state = GameState::new()?;
+    let state = GameState::new(&mut ctx)?;
     event::run(ctx, event_loop, state)
 }
