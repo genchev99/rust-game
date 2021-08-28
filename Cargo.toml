@@ -13,3 +13,4 @@ path = "src/main.rs"
 [dependencies]
 ggez = "0.6"
 rand = "0.8.4"
+serde_json = "1.0.59"

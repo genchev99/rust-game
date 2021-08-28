@@ -2,13 +2,14 @@ mod creature;
 mod player;
 mod movement;
 mod config;
+mod map;
 
 use ggez::event::KeyCode;
 use ggez::{event, graphics, Context, GameResult};
 use std::time::{Duration, Instant};
 use crate::creature::Creature;
 use crate::player::Player;
-use crate::config::{MILLIS_PER_UPDATE, SCREEN_SIZE, GRID_SIZE};
+use crate::config::{MILLIS_PER_UPDATE, SCREEN_SIZE, GRID_SIZE, MAP_SIZE};
 use crate::movement::Direction;
 
 struct GameState {
@@ -22,7 +23,7 @@ struct GameState {
 impl GameState {
     pub fn new(ctx: &mut Context) -> GameResult<Self> {
         let asset = graphics::Image::new(ctx, "/tiles/generic-rpg-Slice.png")?;
-        let player_pos = (GRID_SIZE.0 / 4, GRID_SIZE.1 / 2).into();
+        let player_pos = (MAP_SIZE.0 / 4, MAP_SIZE.1 / 2).into();
         let creature_pos = (GRID_SIZE.0 / 4, GRID_SIZE.1 / 2).into();
 
         Ok(GameState {
@@ -49,6 +50,10 @@ impl event::EventHandler<ggez::GameError> for GameState {
 
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
         graphics::clear(ctx, [0.0, 1.0, 0.0, 1.0].into());
+
+        // draw map
+
+
         self.player.draw(ctx)?;
         // self.creature.draw(ctx, self.asset)?;
         graphics::draw(ctx, &self.asset, graphics::DrawParam::default())?;
